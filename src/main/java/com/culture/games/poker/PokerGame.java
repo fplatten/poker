@@ -11,6 +11,10 @@ public class PokerGame {
 	
 	public static final int HOLD_LIMIT = 2;
 	public static final int FLOP = 3;
+	private FullDeck deck = new FullDeck();
+	LinkedList<Player> players = new LinkedList<>();
+	LinkedList<PlayingCard> board = new LinkedList<>();
+    LinkedList<PlayingCard> burners = new LinkedList<>();
 
 	public static void main(String args[]) {
 		
@@ -28,32 +32,41 @@ public class PokerGame {
 		//river
 		//discards
 		
+		PokerGame pokerGame = new PokerGame();
+		pokerGame.simulate();
 		
 		
-        simulate();
     }
 
-    public static void simulate() {
+    public void simulate() {
     	
-    	LinkedList<Player> players = new LinkedList<>();
+    	Player player1 = new Player("player1", this);
+    	Player player2 = new Player("player2", this);
+    	Player player3 = new Player("player3", this);
+    	Player player4 = new Player("player4", this);
+    	Player player5 = new Player("player5", this);
+    	Player player6 = new Player("player6", this);
     	
-    	players.add(new Player("player1", Position.BUTTON));
-    	players.add(new Player("player2", Position.SMALL_BLIND));
-    	players.add(new Player("player3", Position.BIG_BLIND));
-    	players.add(new Player("player4", Position.UTG));
-    	players.add(new Player("player5", Position.HIGH_JACK));
-    	players.add(new Player("player6", Position.CUTTOFF));
+    	players.add(player1);
+    	players.add(player2);
+    	players.add(player3);
+    	players.add(player4);
+    	players.add(player5);
+    	players.add(player6);
     	
-        FullDeck deck = new FullDeck();
+    	
+    	player1.setPosition(Position.BUTTON);
+    	player2.setPosition(Position.SMALL_BLIND);
+    	player3.setPosition(Position.BIG_BLIND);
+    	player4.setPosition(Position.UTG);
+    	player5.setPosition(Position.HIGH_JACK);
+    	player6.setPosition(Position.CUTTOFF);
+    	
+        deck = new FullDeck();
         deck.shuffle();
-        LinkedList<PlayingCard> board = new LinkedList<>();
-        LinkedList<PlayingCard> burners = new LinkedList<>();
         
-        players.sort( new Comparator<Player>(){
-			@Override
-			public int compare(Player p1, Player p2) {
-				return p1.getPosition().compareTo(p2.getPosition());
-			}} );
+        
+        players.sort( Player.positionComparator );
         
         IntStream.range(0, HOLD_LIMIT).forEach($ -> players.forEach(player -> player.addCardToHand(deck.nextCard())));
         
@@ -75,11 +88,22 @@ public class PokerGame {
         burners.add(deck.nextCard());
         board.add(deck.nextCard());
         
+        
         System.out.print("board: ");
         
         board.forEach(card -> System.out.print(card.toString() + " "));
         
         
     }
+
+	public LinkedList<PlayingCard> getBoard() {
+		return board;
+	}
+
+	public void setBoard(LinkedList<PlayingCard> board) {
+		this.board = board;
+	}
+    
+    
 
 }

@@ -21,6 +21,12 @@
 			<scope>test</scope>
 		</dependency>
 
+		<dependency>
+			<groupId>com.deliveredtechnologies</groupId>
+			<artifactId>rulebook-core</artifactId>
+			<version>0.9</version>
+		</dependency>
+
 	</dependencies>
 
 	<build>
@@ -35,10 +41,10 @@
 					<target>1.8</target>
 				</configuration>
 			</plugin>
-  
+
 		</plugins>
 	</build>
 
-	
+
 
 </project>

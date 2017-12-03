@@ -1,5 +1,7 @@
 package com.culture.games.poker;
 
+import java.util.Comparator;
+
 public enum Position {
 	
 	SMALL_BLIND,
@@ -11,4 +13,6 @@ public enum Position {
 	HIGH_JACK,
 	CUTTOFF,
 	BUTTON;
+	
+	
 }
