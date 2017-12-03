@@ -151,11 +151,8 @@ public class RuleHelper {
 	
 	public static List<PlayingCard> findHighCards(LinkedList<PlayingCard> cards, int count){
 		
-//		return cards.stream()
-//		.collect(Collectors.groupingBy(PlayingCard::getRank, Collectors.toList()))
-//		.values().stream().filter(p -> p.size() == count).findFirst();
-		
-		return null;
+		cards.sort(PlayingCard.rankSorter);
+		return cards.subList(0, count);
 		
 	}
 
