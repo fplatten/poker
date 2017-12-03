@@ -10,7 +10,7 @@ public enum HandType {
 	STRAIGHT("Straight"),	
 	THREE_OF_A_KIND("Three-of-a-Kind"),
 	TWO_PAIR("Two Pair"),
-	ONE_PAIR("One Pair"),
+	PAIR("One Pair"),
 	HIGH_CARD("High Card");
 
 	private String label;

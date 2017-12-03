@@ -3,7 +3,6 @@ package com.culture.games.poker.rules.hands;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 import com.culture.games.poker.HandType;
 import com.culture.games.poker.Player;
@@ -17,9 +16,9 @@ import com.deliveredtechnologies.rulebook.annotation.Rule;
 import com.deliveredtechnologies.rulebook.annotation.Then;
 import com.deliveredtechnologies.rulebook.annotation.When;
 
-@Rule(order = 3)
-public class FourOfAKindRule {
-
+@Rule(order = 7)
+public class ThreeOfAKindRule {
+	
 	@Given
 	private List<Player> players;
 
@@ -32,17 +31,15 @@ public class FourOfAKindRule {
 		LinkedList<PlayingCard> cards = new LinkedList<>();
 		cards.addAll(players.get(0).getHoleCards());
 		cards.addAll(players.get(0).getPokerGame().getBoard());
+
+		Optional<List<PlayingCard>> threeMatch = RuleHelper.findMatch(cards, PokerConstants.PAIR);
 		
-		Optional<List<PlayingCard>> fourMatch =cards.stream()
-		.collect(Collectors.groupingBy(PlayingCard::getRank, Collectors.toList()))
-		.values().stream().filter(p -> p.size() == 4).findAny();
-		
-		if(fourMatch.isPresent()){
-			players.get(0).getBestHand().addAll(fourMatch.get());
-			cards.removeAll(fourMatch.get());
-			players.get(0).getBestHand().addAll(RuleHelper.findHighCards(cards, 1));
+		if(threeMatch.isPresent()){
+			players.get(0).getBestHand().addAll(threeMatch.get());
+			cards.removeAll(threeMatch.get());
+			players.get(0).getBestHand().addAll(RuleHelper.findHighCards(cards, PokerConstants.PAIR));
 			return true;
-		}
+		}		
 		
 		return false;
 
@@ -50,8 +47,10 @@ public class FourOfAKindRule {
 
 	@Then
 	public RuleState then() {
+		
+		//TODO: add best five cards to player class
 
-		handType = HandType.FOUR_OF_A_KIND;
+		handType = HandType.THREE_OF_A_KIND;
 		players.get(0).setHandType(handType);
 		return RuleState.BREAK;
 

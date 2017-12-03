@@ -45,7 +45,7 @@ public class StraightFlushRule {
 			if(straight.size() == PokerConstants.HAND_SIZE 
 					&& !straight.getFirst().getRank().equals(Rank.ACE)
 					&& !straight.getLast().getRank().equals(Rank.TEN)){
-				//TODO: set 5 best cards
+				players.get(0).getBestHand().addAll(RuleHelper.findHighCards(straight, PokerConstants.HAND_SIZE));
 				return true;
 			}
 		}
@@ -57,6 +57,7 @@ public class StraightFlushRule {
 	public RuleState then(){
 		
 		handType = HandType.STRAIGHT_FLUSH;
+		players.get(0).setHandType(handType);
 		return RuleState.BREAK;
 		
 	}

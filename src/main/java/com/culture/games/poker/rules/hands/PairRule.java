@@ -19,8 +19,8 @@ import com.deliveredtechnologies.rulebook.annotation.Rule;
 import com.deliveredtechnologies.rulebook.annotation.Then;
 import com.deliveredtechnologies.rulebook.annotation.When;
 
-@Rule(order = 4)
-public class FullHouseRule {
+@Rule(order = 9)
+public class PairRule {
 	
 	@Given
 	private List<Player> players;
@@ -34,43 +34,26 @@ public class FullHouseRule {
 		LinkedList<PlayingCard> cards = new LinkedList<>();
 		cards.addAll(players.get(0).getHoleCards());
 		cards.addAll(players.get(0).getPokerGame().getBoard());
-
-		Optional<List<PlayingCard>> threeMatch = RuleHelper.findMatch(cards, PokerConstants.PAIR);
 		
-		Map<Rank,List<PlayingCard>> threes = new HashMap<>();
+		Optional<List<PlayingCard>> twoMatch = RuleHelper.findMatch(cards, 1);
 		Map<Rank,List<PlayingCard>> twos = new HashMap<>();
 		
-		while(threeMatch.isPresent()){
-			threes.put(threeMatch.get().get(0).getRank(), threeMatch.get());
-			threeMatch.get().forEach(t  -> cards.remove(t));
-			threeMatch = RuleHelper.findMatch(cards, PokerConstants.PAIR);			
+		while(twoMatch.isPresent()){
+			twos.put(twoMatch.get().get(0).getRank(), twoMatch.get());
+			twoMatch.get().forEach(t  -> cards.remove(t));
+			twoMatch = RuleHelper.findMatch(cards, 1);			
 		}
 		
-		if(threes.size() > 0){
-			threes.forEach((k,v) -> cards.removeAll(v));
+		if(twos.size() == 1){
 			
-			Optional<List<PlayingCard>> twoMatch = RuleHelper.findMatch(cards, 1);
+			List<PlayingCard> topPair = RuleHelper.getMaxRank(twos);
+			players.get(0).getBestHand().addAll(topPair);
+			topPair.forEach(t -> cards.remove(t));
 			
-			while(twoMatch.isPresent()){
-				twos.put(twoMatch.get().get(0).getRank(), twoMatch.get());
-				twoMatch.get().forEach(t  -> cards.remove(t));
-				twoMatch = RuleHelper.findMatch(cards, 1);
-			}
+			//get high card to fill out hand
+			players.get(0).getBestHand().addAll(RuleHelper.findHighCards(cards, PokerConstants.THREE_OF_A_KIND));
 			
-			if(twos.size() > 0 || threes.size() > 2){
-				List<PlayingCard> topThree = RuleHelper.getMaxRank(threes);
-				if(threes.size() > 1){
-					threes.remove(topThree.get(0).getRank());
-					threes.forEach((k,v) -> twos.put(k, v));
-				}
-				List<PlayingCard> topTwo = RuleHelper.getMaxRank(twos);
-				
-				players.get(0).getBestHand().addAll(topThree);
-				players.get(0).getBestHand().addAll(RuleHelper.findHighCards(topTwo, 2));
-				
-				return true;
-			}
-			
+			return true;
 		}
 		
 		return false;
@@ -79,8 +62,10 @@ public class FullHouseRule {
 
 	@Then
 	public RuleState then() {
+		
+		//TODO: add best five cards to player class
 
-		handType = HandType.FULL_HOUSE;
+		handType = HandType.PAIR;
 		players.get(0).setHandType(handType);
 		return RuleState.BREAK;
 

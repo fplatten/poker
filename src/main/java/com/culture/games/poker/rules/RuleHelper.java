@@ -126,8 +126,6 @@ public class RuleHelper {
 		}
 
 		);
-		
-		cards.forEach(card -> System.out.println(card.toString()));
 
 		if (stack.size() == 4 && cards.getLast().getRank().equals(Rank.TWO) && hasAce) {
 			stack.push(cards.getFirst());
@@ -153,6 +151,29 @@ public class RuleHelper {
 		
 		cards.sort(PlayingCard.rankSorter);
 		return cards.subList(0, count);
+		
+	}
+	
+	public static List<PlayingCard> findHighCards(Map<Rank,List<PlayingCard>> ranks, int count){
+		
+		SortedSet<Rank> keys = new TreeSet<>(ranks.keySet());
+		LinkedList<PlayingCard> cards = new LinkedList<>();
+		keys.forEach(t -> cards.add(ranks.get(t).get(0)));	
+		return findHighCards(cards, count);
+		
+	}
+	
+	public static List<PlayingCard> findHighCards(List<PlayingCard> cards, int count){
+		
+		cards.sort(PlayingCard.rankSorter);
+		return cards.subList(0, count);
+		
+	}
+	
+	public static List<PlayingCard> getMaxRank(Map<Rank,List<PlayingCard>> ranks){
+		
+		SortedSet<Rank> keys = new TreeSet<>(ranks.keySet());
+		return ranks.get(keys.first());
 		
 	}
 

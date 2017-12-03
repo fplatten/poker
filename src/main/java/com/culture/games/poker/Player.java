@@ -11,9 +11,9 @@ public class Player {
 	String name;
 	LinkedList<PlayingCard> holeCards = new LinkedList<>();
 	LinkedList<PlayingCard> bestHand = new LinkedList<>();
-	
 	Position position;
 	PokerGame pokerGame;
+	private HandType handType;
 
 	// sessionHistory;
 
@@ -68,6 +68,16 @@ public class Player {
 	public void setPokerGame(PokerGame pokerGame) {
 		this.pokerGame = pokerGame;
 	}
+
+	public HandType getHandType() {
+		return handType;
+	}
+
+	public void setHandType(HandType handType) {
+		this.handType = handType;
+	}
+
+
 
 	public static Comparator<Player> positionComparator = new Comparator<Player>() {
 		@Override

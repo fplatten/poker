@@ -1,11 +1,14 @@
 package com.culture.games.poker;
 
-import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.stream.IntStream;
 
 import com.culture.games.poker.cards.PlayingCard;
 import com.culture.games.poker.decks.FullDeck;
+import com.deliveredtechnologies.rulebook.Fact;
+import com.deliveredtechnologies.rulebook.FactMap;
+import com.deliveredtechnologies.rulebook.NameValueReferableMap;
+import com.deliveredtechnologies.rulebook.model.runner.RuleBookRunner;
 
 public class PokerGame {
 	
@@ -88,10 +91,32 @@ public class PokerGame {
         burners.add(deck.nextCard());
         board.add(deck.nextCard());
         
-        
         System.out.print("board: ");
         
         board.forEach(card -> System.out.print(card.toString() + " "));
+        
+        System.out.println();
+        
+        players.forEach(player -> {
+        	
+        	RuleBookRunner cardHandRules = new RuleBookRunner("com.culture.games.poker.rules.hands");
+    		NameValueReferableMap<Player> facts = new FactMap<>();
+    		facts.put(new Fact<>(player));
+    		cardHandRules.run(facts);
+    		
+    		cardHandRules.getResult().ifPresent(foo -> {
+    			if(foo.getValue() instanceof HandType){
+    				HandType playerHand = (HandType) foo.getValue();
+    				
+    				System.out.print(player.getName() + " hand is " + playerHand + " ");
+    				player.getBestHand().forEach(card -> System.out.print(card.toString() + " "));
+    				
+    			}
+    		});
+    		
+    		System.out.print("\n");
+        	
+        });
         
         
     }
