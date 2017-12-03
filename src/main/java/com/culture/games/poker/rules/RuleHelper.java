@@ -4,9 +4,11 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.SortedSet;
 import java.util.Stack;
 import java.util.TreeSet;
+import java.util.stream.Collectors;
 
 import com.culture.games.poker.cards.PlayingCard;
 import com.culture.games.poker.cards.Rank;
@@ -137,6 +139,24 @@ public class RuleHelper {
 
 		return straight;
 
+	}
+	
+	public static Optional<List<PlayingCard>> findMatch(LinkedList<PlayingCard> cards, int count){
+		
+		return cards.stream()
+		.collect(Collectors.groupingBy(PlayingCard::getRank, Collectors.toList()))
+		.values().stream().filter(p -> p.size() > count).findFirst();
+		
+	}
+	
+	public static List<PlayingCard> findHighCards(LinkedList<PlayingCard> cards, int count){
+		
+//		return cards.stream()
+//		.collect(Collectors.groupingBy(PlayingCard::getRank, Collectors.toList()))
+//		.values().stream().filter(p -> p.size() == count).findFirst();
+		
+		return null;
+		
 	}
 
 }

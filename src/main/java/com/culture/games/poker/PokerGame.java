@@ -72,7 +72,7 @@ public class PokerGame {
         
         players.forEach(player -> {
         	System.out.print(player.getName() + ": ");
-        	player.getHand().forEach(card -> System.out.print(card + " "));
+        	player.getHoleCards().forEach(card -> System.out.print(card + " "));
         	System.out.println();
         });
         

@@ -9,7 +9,9 @@ public class Player {
 
 	// chipStack
 	String name;
-	LinkedList<PlayingCard> hand = new LinkedList<>();
+	LinkedList<PlayingCard> holeCards = new LinkedList<>();
+	LinkedList<PlayingCard> bestHand = new LinkedList<>();
+	
 	Position position;
 	PokerGame pokerGame;
 
@@ -23,16 +25,24 @@ public class Player {
 		this.pokerGame = pokerGame;
 	}
 
-	public LinkedList<PlayingCard> getHand() {
-		return hand;
-	}
-
-	public void setHand(LinkedList<PlayingCard> hand) {
-		this.hand = hand;
-	}
-
 	public void addCardToHand(PlayingCard card) {
-		hand.add(card);
+		holeCards.add(card);
+	}
+
+	public LinkedList<PlayingCard> getHoleCards() {
+		return holeCards;
+	}
+
+	public void setHoleCards(LinkedList<PlayingCard> holeCards) {
+		this.holeCards = holeCards;
+	}
+
+	public LinkedList<PlayingCard> getBestHand() {
+		return bestHand;
+	}
+
+	public void setBestHand(LinkedList<PlayingCard> bestHand) {
+		this.bestHand = bestHand;
 	}
 
 	public String getName() {

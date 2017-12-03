@@ -19,9 +19,8 @@ import com.deliveredtechnologies.rulebook.annotation.Rule;
 import com.deliveredtechnologies.rulebook.annotation.Then;
 import com.deliveredtechnologies.rulebook.annotation.When;
 
-@Rule(order=1)
-public class RoyalFlushRule {
-	
+@Rule(order=2)
+public class StraightFlushRule {
 	
 	@Given
 	private List<Player> players;
@@ -38,17 +37,15 @@ public class RoyalFlushRule {
 		cards.addAll(players.get(0).getPokerGame().getBoard());
 		
 		Map<Suit,List<PlayingCard>> suits = cards.stream().collect(Collectors.groupingBy(PlayingCard::getSuit,Collectors.toList()));
-		Map<Rank,List<PlayingCard>> ranks = cards.stream().collect(Collectors.groupingBy(PlayingCard::getRank,Collectors.toList()));
-		
 		
 		List<PlayingCard> flush = RuleHelper.getFlush(suits);
-		Map<Rank,List<PlayingCard>> foo = RuleHelper.getStraight(ranks);
 		
 		if(flush.size() == PokerConstants.HAND_SIZE){
 			LinkedList<PlayingCard> straight = RuleHelper.getStraight(flush);
 			if(straight.size() == PokerConstants.HAND_SIZE 
-					&& straight.getFirst().getRank().equals(Rank.ACE)
-					&& straight.getLast().getRank().equals(Rank.TEN)){
+					&& !straight.getFirst().getRank().equals(Rank.ACE)
+					&& !straight.getLast().getRank().equals(Rank.TEN)){
+				//TODO: set 5 best cards
 				return true;
 			}
 		}
@@ -59,9 +56,7 @@ public class RoyalFlushRule {
 	@Then
 	public RuleState then(){
 		
-		//TODO: add best five cards to player class
-		
-		handType = HandType.ROYAL_FLUSH;
+		handType = HandType.STRAIGHT_FLUSH;
 		return RuleState.BREAK;
 		
 	}
