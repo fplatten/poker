@@ -8,6 +8,7 @@ import java.util.stream.Collectors;
 import com.culture.games.poker.HandType;
 import com.culture.games.poker.cards.PlayingCard;
 import com.culture.games.poker.cards.Suit;
+import com.culture.games.poker.model.Hand;
 import com.culture.games.poker.model.Player;
 import com.culture.games.poker.rules.RuleHelper;
 import com.culture.games.poker.utils.PokerConstants;
@@ -27,6 +28,8 @@ public class FlushRule {
 	@Result
 	private HandType handType;
 	
+	private LinkedList<PlayingCard> bestCards = new LinkedList<>();
+	
 	@When
 	public boolean when(){		
 		
@@ -39,7 +42,7 @@ public class FlushRule {
 		List<PlayingCard> flush = RuleHelper.getFlush(suits);
 		
 		if(flush.size() == PokerConstants.HAND_SIZE){
-			players.get(0).getBestHand().addAll(RuleHelper.findHighCards(flush, PokerConstants.HAND_SIZE));
+			bestCards.addAll(RuleHelper.findHighCards(flush, PokerConstants.HAND_SIZE));
 			return true;			
 		}
 		
@@ -50,7 +53,7 @@ public class FlushRule {
 	public RuleState then(){
 		
 		handType = HandType.FLUSH;
-		players.get(0).setHandType(handType);
+		players.get(0).setHand(new Hand(handType,bestCards));
 		return RuleState.BREAK;
 		
 	}

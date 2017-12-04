@@ -110,7 +110,7 @@ public class PokerGame {
     				HandType playerHand = (HandType) foo.getValue();
     				
     				System.out.print(player.getName() + " hand is " + playerHand + " ");
-    				player.getBestHand().forEach(card -> System.out.print(card.toString() + " "));
+    				player.getHand().getCards().forEach(card -> System.out.print(card.toString() + " "));
     				
     			}
     		});
@@ -118,6 +118,19 @@ public class PokerGame {
     		System.out.print("\n");
         	
         });
+        
+        players.sort(Player.handComparator);
+        
+        System.out.println("### SORT HANDS ACCORDING TO RANK");
+        
+        players.forEach(player -> {
+        	
+        	System.out.print(player.getName() + " hand is " + player.getHand().getHandType() + " ");
+			player.getHand().getCards().forEach(card -> System.out.print(card.toString() + " "));
+			System.out.print("\n");
+        	
+        });
+        
         
         
     }

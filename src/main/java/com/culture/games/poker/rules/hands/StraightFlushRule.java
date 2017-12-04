@@ -9,6 +9,7 @@ import com.culture.games.poker.HandType;
 import com.culture.games.poker.cards.PlayingCard;
 import com.culture.games.poker.cards.Rank;
 import com.culture.games.poker.cards.Suit;
+import com.culture.games.poker.model.Hand;
 import com.culture.games.poker.model.Player;
 import com.culture.games.poker.rules.RuleHelper;
 import com.culture.games.poker.utils.PokerConstants;
@@ -28,6 +29,8 @@ public class StraightFlushRule {
 	@Result
 	private HandType handType;
 	
+	private LinkedList<PlayingCard> bestCards = new LinkedList<>();
+	
 	@When
 	public boolean when(){
 		
@@ -45,7 +48,7 @@ public class StraightFlushRule {
 			if(straight.size() == PokerConstants.HAND_SIZE 
 					&& !straight.getFirst().getRank().equals(Rank.ACE)
 					&& !straight.getLast().getRank().equals(Rank.TEN)){
-				players.get(0).getBestHand().addAll(RuleHelper.findHighCards(straight, PokerConstants.HAND_SIZE));
+				bestCards.addAll(RuleHelper.findHighCards(straight, PokerConstants.HAND_SIZE));
 				return true;
 			}
 		}
@@ -57,7 +60,7 @@ public class StraightFlushRule {
 	public RuleState then(){
 		
 		handType = HandType.STRAIGHT_FLUSH;
-		players.get(0).setHandType(handType);
+		players.get(0).setHand(new Hand(handType,bestCards));
 		return RuleState.BREAK;
 		
 	}

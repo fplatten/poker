@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.culture.games.poker.HandType;
 import com.culture.games.poker.cards.PlayingCard;
+import com.culture.games.poker.model.Hand;
 import com.culture.games.poker.model.Player;
 import com.culture.games.poker.rules.RuleHelper;
 import com.culture.games.poker.utils.PokerConstants;
@@ -23,6 +24,8 @@ public class HighCardRule {
 
 	@Result
 	private HandType handType;
+	
+	private LinkedList<PlayingCard> bestCards = new LinkedList<>();
 
 	@When
 	public boolean when() {
@@ -30,18 +33,16 @@ public class HighCardRule {
 		LinkedList<PlayingCard> cards = new LinkedList<>();
 		cards.addAll(players.get(0).getHoleCards());
 		cards.addAll(players.get(0).getPokerGame().getBoard());
-		players.get(0).getBestHand().addAll(RuleHelper.findHighCards(cards, PokerConstants.HAND_SIZE));
+		bestCards.addAll(RuleHelper.findHighCards(cards, PokerConstants.HAND_SIZE));
 		return true;
 
 	}
 
 	@Then
 	public RuleState then() {
-		
-		//TODO: add best five cards to player class
 
 		handType = HandType.HIGH_CARD;
-		players.get(0).setHandType(handType);
+		players.get(0).setHand(new Hand(handType,bestCards));
 		return RuleState.BREAK;
 
 	}

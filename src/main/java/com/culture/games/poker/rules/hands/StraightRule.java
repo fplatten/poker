@@ -8,6 +8,7 @@ import java.util.stream.Collectors;
 import com.culture.games.poker.HandType;
 import com.culture.games.poker.cards.PlayingCard;
 import com.culture.games.poker.cards.Rank;
+import com.culture.games.poker.model.Hand;
 import com.culture.games.poker.model.Player;
 import com.culture.games.poker.rules.RuleHelper;
 import com.culture.games.poker.utils.PokerConstants;
@@ -27,6 +28,8 @@ public class StraightRule {
 	@Result
 	private HandType handType;
 	
+	private LinkedList<PlayingCard> bestCards = new LinkedList<>();
+	
 	@When
 	public boolean when(){
 		
@@ -38,7 +41,7 @@ public class StraightRule {
 		Map<Rank, List<PlayingCard>> straight = RuleHelper.getStraight(ranks);
 		
 		if(straight.size() == PokerConstants.HAND_SIZE){
-			players.get(0).getBestHand().addAll(RuleHelper.findHighCards(straight, PokerConstants.HAND_SIZE));
+			bestCards.addAll(RuleHelper.findHighCards(straight, PokerConstants.HAND_SIZE));
 			return true;
 		}
 		
@@ -49,7 +52,7 @@ public class StraightRule {
 	public RuleState then(){
 		
 		handType = HandType.STRAIGHT;
-		players.get(0).setHandType(handType);
+		players.get(0).setHand(new Hand(handType,bestCards));
 		return RuleState.BREAK;
 		
 	}

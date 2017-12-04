@@ -9,6 +9,7 @@ import java.util.Optional;
 import com.culture.games.poker.HandType;
 import com.culture.games.poker.cards.PlayingCard;
 import com.culture.games.poker.cards.Rank;
+import com.culture.games.poker.model.Hand;
 import com.culture.games.poker.model.Player;
 import com.culture.games.poker.rules.RuleHelper;
 import com.culture.games.poker.utils.PokerConstants;
@@ -27,6 +28,8 @@ public class PairRule {
 
 	@Result
 	private HandType handType;
+	
+	private LinkedList<PlayingCard> bestCards = new LinkedList<>();
 
 	@When
 	public boolean when() {
@@ -47,11 +50,11 @@ public class PairRule {
 		if(twos.size() == 1){
 			
 			List<PlayingCard> topPair = RuleHelper.getMaxRank(twos);
-			players.get(0).getBestHand().addAll(topPair);
+			bestCards.addAll(topPair);
 			topPair.forEach(t -> cards.remove(t));
 			
 			//get high card to fill out hand
-			players.get(0).getBestHand().addAll(RuleHelper.findHighCards(cards, PokerConstants.THREE_OF_A_KIND));
+			bestCards.addAll(RuleHelper.findHighCards(cards, PokerConstants.THREE_OF_A_KIND));
 			
 			return true;
 		}
@@ -62,11 +65,9 @@ public class PairRule {
 
 	@Then
 	public RuleState then() {
-		
-		//TODO: add best five cards to player class
 
 		handType = HandType.PAIR;
-		players.get(0).setHandType(handType);
+		players.get(0).setHand(new Hand(handType,bestCards));
 		return RuleState.BREAK;
 
 	}

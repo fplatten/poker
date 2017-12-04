@@ -4,7 +4,7 @@ import java.io.UnsupportedEncodingException;
 import java.util.Comparator;
 
 
-public class PlayingCard {
+public class PlayingCard{
     private Suit suit;
     private Rank rank;
 

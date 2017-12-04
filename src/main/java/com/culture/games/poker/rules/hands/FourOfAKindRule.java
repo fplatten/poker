@@ -7,6 +7,7 @@ import java.util.stream.Collectors;
 
 import com.culture.games.poker.HandType;
 import com.culture.games.poker.cards.PlayingCard;
+import com.culture.games.poker.model.Hand;
 import com.culture.games.poker.model.Player;
 import com.culture.games.poker.rules.RuleHelper;
 import com.culture.games.poker.utils.PokerConstants;
@@ -25,6 +26,8 @@ public class FourOfAKindRule {
 
 	@Result
 	private HandType handType;
+	
+	private LinkedList<PlayingCard> bestCards = new LinkedList<>();
 
 	@When
 	public boolean when() {
@@ -33,14 +36,14 @@ public class FourOfAKindRule {
 		cards.addAll(players.get(0).getHoleCards());
 		cards.addAll(players.get(0).getPokerGame().getBoard());
 		
-		Optional<List<PlayingCard>> fourMatch =cards.stream()
+		Optional<List<PlayingCard>> fourMatch = cards.stream()
 		.collect(Collectors.groupingBy(PlayingCard::getRank, Collectors.toList()))
 		.values().stream().filter(p -> p.size() == 4).findAny();
 		
 		if(fourMatch.isPresent()){
-			players.get(0).getBestHand().addAll(fourMatch.get());
+			bestCards.addAll(fourMatch.get());
 			cards.removeAll(fourMatch.get());
-			players.get(0).getBestHand().addAll(RuleHelper.findHighCards(cards, 1));
+			bestCards.addAll(RuleHelper.findHighCards(cards, 1));
 			return true;
 		}
 		
@@ -52,7 +55,7 @@ public class FourOfAKindRule {
 	public RuleState then() {
 
 		handType = HandType.FOUR_OF_A_KIND;
-		players.get(0).setHandType(handType);
+		players.get(0).setHand(new Hand(handType,bestCards));
 		return RuleState.BREAK;
 
 	}

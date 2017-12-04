@@ -9,6 +9,7 @@ import java.util.Optional;
 import com.culture.games.poker.HandType;
 import com.culture.games.poker.cards.PlayingCard;
 import com.culture.games.poker.cards.Rank;
+import com.culture.games.poker.model.Hand;
 import com.culture.games.poker.model.Player;
 import com.culture.games.poker.rules.RuleHelper;
 import com.culture.games.poker.utils.PokerConstants;
@@ -27,6 +28,8 @@ public class FullHouseRule {
 
 	@Result
 	private HandType handType;
+	
+	private LinkedList<PlayingCard> bestCards = new LinkedList<>();
 
 	@When
 	public boolean when() {
@@ -57,7 +60,7 @@ public class FullHouseRule {
 				twoMatch = RuleHelper.findMatch(cards, 1);
 			}
 			
-			if(twos.size() > 0 || threes.size() > 2){
+			if(twos.size() > 0 || threes.size() > 1){
 				List<PlayingCard> topThree = RuleHelper.getMaxRank(threes);
 				if(threes.size() > 1){
 					threes.remove(topThree.get(0).getRank());
@@ -65,8 +68,8 @@ public class FullHouseRule {
 				}
 				List<PlayingCard> topTwo = RuleHelper.getMaxRank(twos);
 				
-				players.get(0).getBestHand().addAll(topThree);
-				players.get(0).getBestHand().addAll(RuleHelper.findHighCards(topTwo, 2));
+				bestCards.addAll(topThree);
+				bestCards.addAll(RuleHelper.findHighCards(topTwo, 2));
 				
 				return true;
 			}
@@ -81,7 +84,7 @@ public class FullHouseRule {
 	public RuleState then() {
 
 		handType = HandType.FULL_HOUSE;
-		players.get(0).setHandType(handType);
+		players.get(0).setHand(new Hand(handType,bestCards));
 		return RuleState.BREAK;
 
 	}

@@ -6,6 +6,7 @@ import java.util.Optional;
 
 import com.culture.games.poker.HandType;
 import com.culture.games.poker.cards.PlayingCard;
+import com.culture.games.poker.model.Hand;
 import com.culture.games.poker.model.Player;
 import com.culture.games.poker.rules.RuleHelper;
 import com.culture.games.poker.utils.PokerConstants;
@@ -24,6 +25,8 @@ public class ThreeOfAKindRule {
 
 	@Result
 	private HandType handType;
+	
+	private LinkedList<PlayingCard> bestCards = new LinkedList<>();
 
 	@When
 	public boolean when() {
@@ -35,9 +38,9 @@ public class ThreeOfAKindRule {
 		Optional<List<PlayingCard>> threeMatch = RuleHelper.findMatch(cards, PokerConstants.PAIR);
 		
 		if(threeMatch.isPresent()){
-			players.get(0).getBestHand().addAll(threeMatch.get());
+			bestCards.addAll(threeMatch.get());
 			cards.removeAll(threeMatch.get());
-			players.get(0).getBestHand().addAll(RuleHelper.findHighCards(cards, PokerConstants.PAIR));
+			bestCards.addAll(RuleHelper.findHighCards(cards, PokerConstants.PAIR));
 			return true;
 		}		
 		
@@ -47,11 +50,9 @@ public class ThreeOfAKindRule {
 
 	@Then
 	public RuleState then() {
-		
-		//TODO: add best five cards to player class
 
 		handType = HandType.THREE_OF_A_KIND;
-		players.get(0).setHandType(handType);
+		players.get(0).setHand(new Hand(handType,bestCards));
 		return RuleState.BREAK;
 
 	}

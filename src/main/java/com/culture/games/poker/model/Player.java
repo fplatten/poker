@@ -13,7 +13,8 @@ public class Player {
 	// chipStack
 	String name;
 	LinkedList<PlayingCard> holeCards = new LinkedList<>();
-	LinkedList<PlayingCard> bestHand = new LinkedList<>();
+	//LinkedList<PlayingCard> bestHand = new LinkedList<>();
+	Hand hand;
 	Position position;
 	PokerGame pokerGame;
 	private HandType handType;
@@ -40,12 +41,12 @@ public class Player {
 		this.holeCards = holeCards;
 	}
 
-	public LinkedList<PlayingCard> getBestHand() {
-		return bestHand;
+	public Hand getHand() {
+		return hand;
 	}
 
-	public void setBestHand(LinkedList<PlayingCard> bestHand) {
-		this.bestHand = bestHand;
+	public void setHand(Hand hand) {
+		this.hand = hand;
 	}
 
 	public String getName() {
@@ -80,12 +81,17 @@ public class Player {
 		this.handType = handType;
 	}
 
-
-
 	public static Comparator<Player> positionComparator = new Comparator<Player>() {
 		@Override
 		public int compare(Player p1, Player p2) {
 			return p1.getPosition().compareTo(p2.getPosition());
+		}
+	};
+	
+	public static Comparator<Player> handComparator = new Comparator<Player>() {
+		@Override
+		public int compare(Player p1, Player p2) {
+			return p1.getHand().compareTo(p2.getHand());
 		}
 	};
 
