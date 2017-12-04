@@ -1,8 +1,11 @@
-package com.culture.games.poker;
+package com.culture.games.poker.model;
 
 import java.util.Comparator;
 import java.util.LinkedList;
 
+import com.culture.games.poker.HandType;
+import com.culture.games.poker.PokerGame;
+import com.culture.games.poker.Position;
 import com.culture.games.poker.cards.PlayingCard;
 
 public class Player {

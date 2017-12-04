@@ -4,8 +4,8 @@ import java.util.LinkedList;
 import java.util.List;
 
 import com.culture.games.poker.HandType;
-import com.culture.games.poker.Player;
 import com.culture.games.poker.cards.PlayingCard;
+import com.culture.games.poker.model.Player;
 import com.culture.games.poker.rules.RuleHelper;
 import com.culture.games.poker.utils.PokerConstants;
 import com.deliveredtechnologies.rulebook.RuleState;

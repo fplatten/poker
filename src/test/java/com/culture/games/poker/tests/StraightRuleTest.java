@@ -5,11 +5,11 @@ import java.util.LinkedList;
 import org.junit.Test;
 
 import com.culture.games.poker.HandType;
-import com.culture.games.poker.Player;
 import com.culture.games.poker.PokerGame;
 import com.culture.games.poker.cards.PlayingCard;
 import com.culture.games.poker.cards.Rank;
 import com.culture.games.poker.cards.Suit;
+import com.culture.games.poker.model.Player;
 import com.deliveredtechnologies.rulebook.Fact;
 import com.deliveredtechnologies.rulebook.FactMap;
 import com.deliveredtechnologies.rulebook.NameValueReferableMap;
